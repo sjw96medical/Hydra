@@ -1,3 +1,8 @@
+this is hydra built from commit
+skidded from roper since its not working anymore
+
+
+
 # Hydra
 <div align="center">
   <img src="https://github.com/MrDiamond64/Hydra/blob/main/img/main.png?raw=true" alt="A screenshot showing the Hydra Players UI"/>
