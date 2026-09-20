@@ -1,4 +1,4 @@
-name: Sync and shi idk
+name: Automated Build and Release
 
 on:
   schedule:
