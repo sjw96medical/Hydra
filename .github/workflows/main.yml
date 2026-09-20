@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.SYNC_PAT }}
           fetch-depth: 0
 
       - name: Sync
@@ -38,7 +38,7 @@ jobs:
 
       - name: Publish 
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.SYNC_PAT }}
         run: |
           SHORT_SHA=$(git rev-parse --short HEAD)
           
