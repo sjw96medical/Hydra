@@ -7,7 +7,7 @@ on:
 
 jobs:
   sync-and-build:
-    runs-on: windows-latest-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
