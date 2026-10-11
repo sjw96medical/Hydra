@@ -34,7 +34,7 @@ jobs:
         run: |
           dotnet restore
           dotnet build -c Release --output ./build_output
-      - name: Publish 
+      - name: Publish Hydra as Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
