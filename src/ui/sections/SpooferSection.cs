@@ -1,8 +1,6 @@
 ﻿using HydraMenu.assets;
 using HydraMenu.modules;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace HydraMenu.ui.sections
@@ -20,6 +18,9 @@ namespace HydraMenu.ui.sections
 			ModuleManager.spoofVersion.SpoofedVersion = Controls.HorizontalListSlider(GameAssets.BroadcastVersions, ModuleManager.spoofVersion.SpoofedVersion);
 
 			ModuleManager.spoofVersion.UseModdedProtocol = GUILayout.Toggle(ModuleManager.spoofVersion.UseModdedProtocol, "Use Modded Protocol");
+
+			GUILayout.Label($"Spoof Mod Registration: {GameAssets.ModRegistrationGuids[CurrentModRegistration.ModRegistrationGuidString]}");
+			CurrentModRegistration.ModRegistrationGuidString = Controls.HorizontalListSlider(GameAssets.ModRegistrationGuids, CurrentModRegistration.ModRegistrationGuidString);
 
 			GUILayout.Space(5);
 			GUILayout.Label("Level Spoofer:");
@@ -59,8 +60,8 @@ namespace HydraMenu.ui.sections
 			GUILayout.Space(5);
 			GUILayout.Label("Platform Spoofer:");
 
-			GUILayout.Label($"Spoofed Platform: {ModuleManager.spoofDevice.SpoofedPlatform}");
-			ModuleManager.spoofDevice.SpoofedPlatform = (Platforms)GUILayout.HorizontalSlider((float)ModuleManager.spoofDevice.SpoofedPlatform, 0, 10);
+			GUILayout.Label($"Spoofed Platform: {GameAssets.GetPlatformName(ModuleManager.spoofDevice.SpoofedPlatform)}");
+			ModuleManager.spoofDevice.SpoofedPlatform = (Platforms)Controls.HorizontalListSlider(GameAssets.PlayerPlatforms, (int)ModuleManager.spoofDevice.SpoofedPlatform);
 		}
 
 		private void ClampSelectedLevel(uint newLevel)
