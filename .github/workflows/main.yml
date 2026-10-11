@@ -17,8 +17,8 @@ jobs:
 
       - name: Sync
         run: |
-          git config --global user.name "MrDiamond64"
-          git config --global user.email "noreply@github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           git remote add upstream https://github.com/MrDiamond64/Hydra.git
           git fetch upstream main
