@@ -1,5 +1,4 @@
 ﻿using BepInEx.Unity.IL2CPP.Utils.Collections;
-using Hazel;
 using HydraMenu.assets;
 using HydraMenu.modules;
 using HydraMenu.network;
@@ -61,6 +60,29 @@ namespace HydraMenu.ui.sections
 			}
 			GUILayout.EndHorizontal();
 
+			if(GUILayout.Button("Votekick all"))
+			{
+				BatchedMessage batch = new BatchedMessage(AmongUsClient.Instance.HostId);
+				int packingLimit = AmongUsClient.Instance.GetMaxMessagePackingLimit();
+
+				// Ensure that the host is the last player to be kicked, as if the host gets kicked too early then some votekicks may not go through
+				PlayerControl[] allPlayers = PlayerControl.AllPlayerControls.ToArray();
+				allPlayers.Reverse();
+
+				foreach(PlayerControl player in allPlayers)
+				{
+					if(batch.msgCount >= packingLimit)
+					{
+						batch.FinishBatch();
+						batch = new BatchedMessage(AmongUsClient.Instance.HostId);
+					}
+
+					batch.QueueAddVote(AmongUsClient.Instance.ClientId, player.OwnerId);
+				}
+
+				batch.FinishBatch();
+			}
+
 			if(GUILayout.Button("Kick All Players"))
 			{
 				foreach(PlayerControl player in PlayerControl.AllPlayerControls)
@@ -90,7 +112,7 @@ namespace HydraMenu.ui.sections
 			SortedDictionary<int, string> vents = MapAssets.GetVents();
 
 			GUILayout.Space(5);
-			GUILayout.Label($"Vent Teleport:");
+			GUILayout.Label("Vent Teleport:");
 			Hydra.routines.teleportSpammer.Enabled = Controls.GlobalPlayerSpecificToggle("Teleport Flooder", Hydra.routines.teleportSpammer.targets);
 
 			GUILayout.Label($"Teleport everyone to vent: {vents.GetValueOrDefault(selectedVent, "N/A")}");
