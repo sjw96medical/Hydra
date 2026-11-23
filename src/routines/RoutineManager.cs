@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HydraMenu.modules;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using UnityEngine;
@@ -21,11 +22,14 @@ namespace HydraMenu.routines
 		public readonly VoteSpammer voteSpammer = new VoteSpammer();
 		public readonly ZiplineSpammer ziplineSpammer = new ZiplineSpammer();
 
-		public readonly Routine[] routineList;
+		private readonly Routine[] routineList;
 
 		public RoutineManager()
 		{
 			routineList = [ autoTriggerSpores, discoHost, doorTroller, glitterBomb, infiniteRoleCooldown, jailPlayer, petPlayer, playerFollower, reportBodySpam, spamInfluencerCues, teleportSpammer, voteSpammer, ziplineSpammer ];
+
+			EventCoordinator.OnDisconnect += OnDisconnect;
+			EventCoordinator.OnGameEnd += OnGameEnd;
 		}
 
 		public void Update()
@@ -38,8 +42,33 @@ namespace HydraMenu.routines
 			}
 		}
 
+		private void OnDisconnect()
+		{
+			foreach(Routine routine in routineList)
+			{
+				if(!routine.Enabled) continue;
+
+				Hydra.notifications.Send(routine.name, $"{routine.name} was disabled as you left the game.", 10);
+				routine.Enabled = false;
+			}
+		}
+
+		public void OnGameEnd(EndGameResult result)
+		{
+			foreach(Routine routine in routineList)
+			{
+				if(!routine.Enabled) continue;
+
+				Hydra.notifications.Send(routine.name, $"{routine.name} was disabled as the game has ended.", 10);
+				routine.Enabled = false;
+			}
+		}
+
 		public void OnDestroy()
 		{
+			EventCoordinator.OnDisconnect -= OnDisconnect;
+			EventCoordinator.OnGameEnd -= OnGameEnd;
+
 			foreach(Routine routine in routineList)
 			{
 				routine.Enabled = false;
